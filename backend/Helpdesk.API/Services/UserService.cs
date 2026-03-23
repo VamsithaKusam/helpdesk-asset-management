@@ -1,6 +1,8 @@
 ﻿using Helpdesk.API.Data;
-using Microsoft.EntityFrameworkCore;
 using Helpdesk.API.DTOs;
+using Helpdesk.API.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace Helpdesk.API.Services
 {
     public class UserService
@@ -25,5 +27,22 @@ namespace Helpdesk.API.Services
                 })
                 .ToListAsync<UserDTO>();
         }
+
+       
+        public async Task<User> CreateUser(CreateUserDTO dto)
+            {
+                var user = new User
+                {
+                    Name = dto.Name,
+                    Email = dto.Email,
+                    PasswordHash = dto.Password, // later we hash
+                    RoleId = dto.RoleId
+                };
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
+                return user;
+            }
+        }
     }
-}

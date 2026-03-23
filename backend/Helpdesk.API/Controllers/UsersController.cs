@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Helpdesk.API.DTOs;
 using Helpdesk.API.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Helpdesk.API.Controllers
 {
@@ -20,5 +21,15 @@ namespace Helpdesk.API.Controllers
             var users = await _userService.GetAllUsers();
             return Ok(users);
         }
-    }
+
+
+       
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(CreateUserDTO dto)
+        {
+             var user = await _userService.CreateUser(dto);
+             return Ok(user);
+        }
+}
 }
