@@ -8,7 +8,8 @@ namespace Helpdesk.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly UserService _userService;
