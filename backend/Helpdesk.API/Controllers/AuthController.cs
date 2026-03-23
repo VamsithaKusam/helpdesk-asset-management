@@ -18,12 +18,12 @@ namespace Helpdesk.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO dto)
         {
-            var isValid = await _authService.ValidateUser(dto);
+            var token = await _authService.Login(dto);
 
-            if (!isValid)
+            if (token == null)
                 return Unauthorized(new { message = "Invalid credentials" });
 
-            return Ok(new { message = "Login successful" });
+            return Ok(new { token });
         }
     }
 }
