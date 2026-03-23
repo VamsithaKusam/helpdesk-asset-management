@@ -31,6 +31,11 @@ namespace Helpdesk.API.Services
        
         public async Task<User> CreateUser(CreateUserDTO dto)
             {
+
+                var roleExists = await _context.Roles.AnyAsync(r => r.Id == dto.RoleId);
+                if (!roleExists) 
+                    throw new Exception("Invalid RoleId");
+
                 var user = new User
                 {
                     Name = dto.Name,

@@ -28,8 +28,19 @@ namespace Helpdesk.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDTO dto)
         {
-             var user = await _userService.CreateUser(dto);
-             return Ok(user);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var user = await _userService.CreateUser(dto);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 }
 }
