@@ -12,5 +12,6 @@ namespace Helpdesk.API.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
     }
 }
