@@ -1,6 +1,6 @@
 ﻿using Helpdesk.API.Data;
 using Microsoft.EntityFrameworkCore;
-
+using Helpdesk.API.DTOs;
 namespace Helpdesk.API.Services
 {
     public class UserService
@@ -12,18 +12,18 @@ namespace Helpdesk.API.Services
             _context = context;
         }
 
-        public async Task<List<object>> GetAllUsers()
+        public async Task<List<UserDTO>> GetAllUsers()
         {
             return await _context.Users
                 .Include(u => u.Role)
-                .Select(u => new
+                .Select(u => new UserDTO
                 {
-                    u.Id,
-                    u.Name,
-                    u.Email,
-                    Role = u.Role.Name
+                   Id= u.Id,
+                   Name= u.Name,
+                   Email= u.Email,
+                   Role = u.Role.Name
                 })
-                .ToListAsync<object>();
+                .ToListAsync<UserDTO>();
         }
     }
 }
