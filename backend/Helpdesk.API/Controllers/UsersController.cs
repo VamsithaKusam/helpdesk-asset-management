@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Helpdesk.API.Data;
-using Microsoft.EntityFrameworkCore;
+using Helpdesk.API.Services;
 
 namespace Helpdesk.API.Controllers
 {
@@ -8,18 +7,17 @@ namespace Helpdesk.API.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly UserService _userService;
 
-        public UsersController(AppDbContext context)
+        public UsersController(UserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
-        // GET: api/users
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _context.Users.Include(u => u.Role).ToListAsync();
+            var users = await _userService.GetAllUsers();
             return Ok(users);
         }
     }
