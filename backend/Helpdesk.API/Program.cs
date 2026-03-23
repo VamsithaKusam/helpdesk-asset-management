@@ -22,6 +22,7 @@ namespace Helpdesk.API
 
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<TicketService>();
 
 
             builder.Services.AddControllers();
@@ -73,14 +74,7 @@ namespace Helpdesk.API
                     ValidAudience = builder.Configuration["Jwt:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
-                //options.TokenValidationParameters = new TokenValidationParameters
-                //{
-                //    ValidateIssuer = false,
-                //    ValidateAudience = false,
-                //    ValidateLifetime = true,
-                //    ValidateIssuerSigningKey = true,
-                //    IssuerSigningKey = new SymmetricSecurityKey(key)
-                //};
+             
             });
 
             var app = builder.Build();
