@@ -58,24 +58,29 @@ namespace Helpdesk.API
                         });
                                 });
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+                        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+              .AddJwtBearer(options =>
+              {
+                  var keyString = builder.Configuration["Jwt:Key"]
+                                  ?? throw new Exception("JWT Key missing");
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
+                  var issuer = builder.Configuration["Jwt:Issuer"]
+                               ?? throw new Exception("JWT Issuer missing");
 
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                };
-             
-            });
+                  var key = Encoding.UTF8.GetBytes(keyString);
+
+                  options.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateIssuer = true,
+                      ValidateAudience = true,
+                      ValidateLifetime = true,
+                      ValidateIssuerSigningKey = true,
+
+                      ValidIssuer = issuer,
+                      ValidAudience = issuer,
+                      IssuerSigningKey = new SymmetricSecurityKey(key)
+                  };
+              });
 
             var app = builder.Build();
 

@@ -27,8 +27,7 @@ namespace Helpdesk.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            var ticket = await _ticketService.CreateTicket(dto);
+            var ticket = await _ticketService.CreateTicket(dto, User);
             return Ok(ticket);
         }
 

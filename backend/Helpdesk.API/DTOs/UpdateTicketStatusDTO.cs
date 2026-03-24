@@ -8,6 +8,6 @@ namespace Helpdesk.API.DTOs
         public int TicketId { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 }

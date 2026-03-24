@@ -1,8 +1,13 @@
-﻿namespace Helpdesk.API.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Helpdesk.API.DTOs
 {
     public class LoginDTO
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        [Required]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
     }
 }

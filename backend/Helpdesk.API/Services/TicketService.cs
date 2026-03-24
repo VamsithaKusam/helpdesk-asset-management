@@ -52,24 +52,34 @@ namespace Helpdesk.API.Services
             }
         }
 
-        public async Task<Ticket> CreateTicket(CreateTicketDTO dto)
-        {
-            var ticket = new Ticket
+    
+
+        public async Task<Ticket> CreateTicket(CreateTicketDTO dto, ClaimsPrincipal user)
             {
-                Title = dto.Title,
-                Description = dto.Description,
-                Status = "Open",
-                CreatedAt = DateTime.Now,
-                UserId = dto.UserId
-            };
+                var email = user.FindFirst(ClaimTypes.Name)?.Value;
 
-            _context.Tickets.Add(ticket);
-            await _context.SaveChangesAsync();
+                var dbUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Email == email);
 
-            return ticket;
-        }
+                if (dbUser == null)
+                    throw new Exception("User not found");
 
-        public async Task<Ticket> UpdateStatus(UpdateTicketStatusDTO dto)
+                var ticket = new Ticket
+                {
+                    Title = dto.Title,
+                    Description = dto.Description,
+                    Status = "Open",
+                    CreatedAt = DateTime.Now,
+                    UserId = dbUser.Id   
+                };
+
+                _context.Tickets.Add(ticket);
+                await _context.SaveChangesAsync();
+
+                return ticket;
+            }
+
+    public async Task<Ticket> UpdateStatus(UpdateTicketStatusDTO dto)
         {
             var ticket = await _context.Tickets.FindAsync(dto.TicketId);
 

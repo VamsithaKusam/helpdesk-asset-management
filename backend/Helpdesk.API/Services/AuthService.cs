@@ -34,28 +34,36 @@ namespace Helpdesk.API.Services
         return GenerateToken(user);
     }
 
-    private string GenerateToken(User user)
-    {
-        var claims = new[]
+        private string GenerateToken(User user)
         {
-            new Claim(ClaimTypes.Name, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.Name)
-        };
+            if (string.IsNullOrEmpty(user.Email))
+                throw new Exception("User email is missing");
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            if (string.IsNullOrEmpty(user.Role?.Name))
+                throw new Exception("User role is missing");
 
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Issuer"],
-            claims: claims,
-            expires: DateTime.Now.AddHours(2),
-            signingCredentials: creds
-        );
+            var claims = new[]
+            {
+        new Claim(ClaimTypes.Name, user.Email),
+        new Claim(ClaimTypes.Role, user.Role.Name)
+    };
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+            var keyString = _config["Jwt:Key"] ?? throw new Exception("JWT Key missing");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Issuer"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(2),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
-}
 
  
 }
