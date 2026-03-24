@@ -16,14 +16,12 @@ namespace Helpdesk.API.Controllers
         {
             _ticketService = ticketService;
         }
-
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var tickets = await _ticketService.GetAllTickets();
+            var tickets = await _ticketService.GetTicketsByUser(User);
             return Ok(tickets);
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateTicket(CreateTicketDTO dto)
         {
