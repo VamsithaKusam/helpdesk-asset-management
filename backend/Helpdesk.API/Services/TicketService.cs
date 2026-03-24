@@ -45,5 +45,19 @@ namespace Helpdesk.API.Services
 
             return ticket;
         }
+
+        public async Task<Ticket> UpdateStatus(UpdateTicketStatusDTO dto)
+        {
+            var ticket = await _context.Tickets.FindAsync(dto.TicketId);
+
+            if (ticket == null)
+                throw new Exception("Ticket not found");
+
+            ticket.Status = dto.Status;
+
+            await _context.SaveChangesAsync();
+
+            return ticket;
+        }
     }
 }

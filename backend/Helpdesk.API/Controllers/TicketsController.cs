@@ -33,5 +33,20 @@ namespace Helpdesk.API.Controllers
             var ticket = await _ticketService.CreateTicket(dto);
             return Ok(ticket);
         }
+
+        [HttpPut("status")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateStatus(UpdateTicketStatusDTO dto)
+        {
+            try
+            {
+                var ticket = await _ticketService.UpdateStatus(dto);
+                return Ok(ticket);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
