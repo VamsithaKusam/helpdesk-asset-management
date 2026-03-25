@@ -32,12 +32,27 @@ namespace Helpdesk.API.Controllers
         }
 
         [HttpPut("status")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> UpdateStatus(UpdateTicketStatusDTO dto)
         {
             try
             {
-                var ticket = await _ticketService.UpdateStatus(dto);
+                var ticket = await _ticketService.UpdateStatus(dto, User);
+                return Ok(ticket);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPut("assign")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AssignTicket(AssignTicketDTO dto)
+        {
+            try
+            {
+                var ticket = await _ticketService.AssignTicket(dto);
                 return Ok(ticket);
             }
             catch (Exception ex)

@@ -79,14 +79,44 @@ namespace Helpdesk.API.Services
                 return ticket;
             }
 
-    public async Task<Ticket> UpdateStatus(UpdateTicketStatusDTO dto)
+        public async Task<Ticket> UpdateStatus(UpdateTicketStatusDTO dto, ClaimsPrincipal user)
         {
             var ticket = await _context.Tickets.FindAsync(dto.TicketId);
 
             if (ticket == null)
                 throw new Exception("Ticket not found");
 
+            var email = user.FindFirst(ClaimTypes.Name)?.Value;
+            var role = user.FindFirst(ClaimTypes.Role)?.Value;
+
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (dbUser == null)
+                throw new Exception("User not found");
+
+            // Rule: Only assigned employee OR admin can update
+            if (role != "Admin" && ticket.AssignedTo != dbUser.Id)
+                throw new Exception("Not authorized to update this ticket");
+
             ticket.Status = dto.Status;
+
+            await _context.SaveChangesAsync();
+
+            return ticket;
+        }
+        public async Task<Ticket> AssignTicket(AssignTicketDTO dto)
+        {
+            var ticket = await _context.Tickets.FindAsync(dto.TicketId);
+
+            if (ticket == null)
+                throw new Exception("Ticket not found");
+
+            var userExists = await _context.Users.AnyAsync(u => u.Id == dto.AssignedToUserId);
+
+            if (!userExists)
+                throw new Exception("Assigned user not found");
+
+            ticket.AssignedTo = dto.AssignedToUserId;
 
             await _context.SaveChangesAsync();
 

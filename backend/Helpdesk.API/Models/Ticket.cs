@@ -10,5 +10,8 @@
 
         public int UserId { get; set; }
         public User User { get; set; } = null!;
+        public int? AssignedTo { get; set; }
+
+        public User? AssignedUser { get; set; }
     }
 }
