@@ -7,5 +7,7 @@
         public string? Description { get; set; }
         public string Status { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
+        public string? AssignedToName { get; set; }
+
     }
 }

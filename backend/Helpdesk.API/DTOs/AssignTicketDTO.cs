@@ -6,5 +6,5 @@ public class AssignTicketDTO
     public int TicketId { get; set; }
 
     [Required]
-    public int AssignedToUserId { get; set; }
+    public string AssignedToEmail { get; set; } = string.Empty;
 }

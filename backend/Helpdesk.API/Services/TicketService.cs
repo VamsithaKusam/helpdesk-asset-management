@@ -25,6 +25,7 @@ namespace Helpdesk.API.Services
             {
                 return await _context.Tickets
                     .Include(t => t.User)
+                    .Include(t => t.AssignedUser)
                     .Select(t => new TicketDTO
                     {
                         Id = t.Id,
@@ -32,6 +33,7 @@ namespace Helpdesk.API.Services
                         Description = t.Description,
                         Status = t.Status,
                         UserName = t.User.Name
+                        AssignedToName = t.AssignedUser != null ? t.AssignedUser.Name : null
                     })
                     .ToListAsync();
             }
@@ -39,6 +41,7 @@ namespace Helpdesk.API.Services
             {
                 return await _context.Tickets
                     .Include(t => t.User)
+                    .Include(t => t.AssignedUser)
                     .Where(t => t.User.Email == email)
                     .Select(t => new TicketDTO
                     {
@@ -47,6 +50,7 @@ namespace Helpdesk.API.Services
                         Description = t.Description,
                         Status = t.Status,
                         UserName = t.User.Name
+                        AssignedToName = t.AssignedUser != null ? t.AssignedUser.Name : null
                     })
                     .ToListAsync();
             }
@@ -111,12 +115,13 @@ namespace Helpdesk.API.Services
             if (ticket == null)
                 throw new Exception("Ticket not found");
 
-            var userExists = await _context.Users.AnyAsync(u => u.Id == dto.AssignedToUserId);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == dto.AssignedToEmail);
 
-            if (!userExists)
-                throw new Exception("Assigned user not found");
+            if (user == null)
+                throw new Exception("User not found");
 
-            ticket.AssignedTo = dto.AssignedToUserId;
+            ticket.AssignedTo = user.Id;
 
             await _context.SaveChangesAsync();
 
