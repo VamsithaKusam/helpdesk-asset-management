@@ -46,19 +46,6 @@ namespace Helpdesk.API.Controllers
             }
         }
 
-        [HttpPut("assign")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AssignTicket(AssignTicketDTO dto)
-        {
-            try
-            {
-                var ticket = await _ticketService.AssignTicket(dto);
-                return Ok(ticket);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
+     
     }
 }

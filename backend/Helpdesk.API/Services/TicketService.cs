@@ -15,7 +15,6 @@ namespace Helpdesk.API.Services
             _context = context;
         }
 
-
         public async Task<List<TicketDTO>> GetTicketsByUser(ClaimsPrincipal user)
         {
             var email = user.FindFirst(ClaimTypes.Name)?.Value;
@@ -25,7 +24,6 @@ namespace Helpdesk.API.Services
             {
                 return await _context.Tickets
                     .Include(t => t.User)
-                    .Include(t => t.AssignedUser)
                     .Select(t => new TicketDTO
                     {
                         Id = t.Id,
@@ -33,7 +31,6 @@ namespace Helpdesk.API.Services
                         Description = t.Description,
                         Status = t.Status,
                         UserName = t.User.Name
-                        AssignedToName = t.AssignedUser != null ? t.AssignedUser.Name : null
                     })
                     .ToListAsync();
             }
@@ -41,7 +38,6 @@ namespace Helpdesk.API.Services
             {
                 return await _context.Tickets
                     .Include(t => t.User)
-                    .Include(t => t.AssignedUser)
                     .Where(t => t.User.Email == email)
                     .Select(t => new TicketDTO
                     {
@@ -50,12 +46,13 @@ namespace Helpdesk.API.Services
                         Description = t.Description,
                         Status = t.Status,
                         UserName = t.User.Name
-                        AssignedToName = t.AssignedUser != null ? t.AssignedUser.Name : null
                     })
                     .ToListAsync();
             }
         }
 
+       
+       
     
 
         public async Task<Ticket> CreateTicket(CreateTicketDTO dto, ClaimsPrincipal user)
@@ -82,6 +79,7 @@ namespace Helpdesk.API.Services
 
                 return ticket;
             }
+        
 
         public async Task<Ticket> UpdateStatus(UpdateTicketStatusDTO dto, ClaimsPrincipal user)
         {
@@ -90,42 +88,17 @@ namespace Helpdesk.API.Services
             if (ticket == null)
                 throw new Exception("Ticket not found");
 
-            var email = user.FindFirst(ClaimTypes.Name)?.Value;
             var role = user.FindFirst(ClaimTypes.Role)?.Value;
 
-            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-            if (dbUser == null)
-                throw new Exception("User not found");
-
-            // Rule: Only assigned employee OR admin can update
-            if (role != "Admin" && ticket.AssignedTo != dbUser.Id)
-                throw new Exception("Not authorized to update this ticket");
+            // Rule: According to requirements, Admins process tickets via Kanban board
+            if (role != "Admin")
+                throw new Exception("Only IT Administrators can update ticket statuses.");
 
             ticket.Status = dto.Status;
-
             await _context.SaveChangesAsync();
 
             return ticket;
         }
-        public async Task<Ticket> AssignTicket(AssignTicketDTO dto)
-        {
-            var ticket = await _context.Tickets.FindAsync(dto.TicketId);
 
-            if (ticket == null)
-                throw new Exception("Ticket not found");
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == dto.AssignedToEmail);
-
-            if (user == null)
-                throw new Exception("User not found");
-
-            ticket.AssignedTo = user.Id;
-
-            await _context.SaveChangesAsync();
-
-            return ticket;
-        }
     }
 }
