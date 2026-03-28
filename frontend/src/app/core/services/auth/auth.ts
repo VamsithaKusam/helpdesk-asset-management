@@ -1,20 +1,30 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  // 1. Simulates sending email/password to .NET and getting a token back
-  login(credentials: any) {
-    // We wrap it in 'of()' to simulate an HTTP response
-    return of({ token: 'fake-jwt-token-for-' + credentials.email });
+  // Your .NET Backend URL (Change the port to match Visual Studio later!)
+  private apiUrl = 'https://localhost:7287/api/auth';
+
+  // Inject the HTTP Client
+  constructor(private http: HttpClient) {}
+
+  // THE REAL LOGIN METHOD: Sends data to .NET
+  login(credentials: any): Observable<any> {
+    // This makes a real POST request to your backend!
+    return this.http.post(`${this.apiUrl}/login`, credentials);
+    
+    // NOTE: If your .NET backend isn't running yet and you still want to test the UI, 
+    // comment out the line above and uncomment the mock line below:
+    // return of({ token: 'fake-jwt-token-for-' + credentials.email });
   }
 
-  // 2. Simulates decoding the token to find the Role
+  // We will update this later to decode the REAL JWT token from .NET
   getRoleFromToken(token: string) {
-    // If the fake token has 'manager' or 'admin' in it, they are an Admin
     if (token.includes('manager') || token.includes('admin')) {
       return 'Admin';
     }
