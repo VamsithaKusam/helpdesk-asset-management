@@ -21,13 +21,16 @@ export class TicketList implements OnInit {
 
   loadTickets() {
     this.ticketService.getMyTickets().subscribe({
-      next: (res: any) => {
-        console.log("TICKETS:", res);
-        this.tickets = res;
-      },
-      error: (err) => {
-        console.error("ERROR:", err);
-      }
-    });
+  next: (res: any) => {
+    console.log("FULL RESPONSE:", res);
+    console.log("TYPE:", typeof res);
+    console.log("IS ARRAY:", Array.isArray(res));
+
+    this.tickets = res;
+  },
+  error: (err) => {
+    console.error(err);
+  }
+});
   }
 }

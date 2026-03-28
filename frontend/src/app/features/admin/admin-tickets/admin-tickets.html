@@ -1,0 +1,25 @@
+<div class="admin-tickets">
+  <h2>All Tickets</h2>
+
+  <div *ngFor="let ticket of tickets" class="ticket-card">
+
+    <h3>{{ ticket.title }}</h3>
+
+    <p>{{ ticket.description }}</p>
+
+    <span>Status: {{ ticket.status }}</span>
+
+    <br><br>
+
+    <select #status>
+      <option>Open</option>
+      <option>InProgress</option>
+      <option>Resolved</option>
+    </select>
+
+    <button (click)="changeStatus(ticket.id, status.value)">
+      Update Status
+    </button>
+
+  </div>
+</div>

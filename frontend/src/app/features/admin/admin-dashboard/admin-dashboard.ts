@@ -15,7 +15,9 @@ export class AdminDashboard {
   pendingTickets = 18;
 
   constructor(private router: Router) {} // Inject Router
-
+goToAdminTickets() {
+  this.router.navigate(['/admin-tickets']);
+}
  logout() {
   console.log("Cleaning up session...");
   localStorage.removeItem('authToken');

@@ -34,5 +34,11 @@ export const routes: Routes = [
   data: { role: 'Employee' },
   loadComponent: () => import('./features/tickets/components/ticket-list/ticket-list').then(c => c.TicketList)
 },
+{
+  path: 'admin-tickets',
+  canActivate: [authGuard],
+  data: { role: 'Admin' },
+  loadComponent: () => import('./features/admin/admin-tickets/admin-tickets').then(c => c.AdminTickets)
+},
  { path: '**', redirectTo: 'auth' }
 ];

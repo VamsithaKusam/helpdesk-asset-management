@@ -20,12 +20,16 @@ export class TicketService {
   return this.http.post(this.api, payload);
 }
 
+getAllTickets() {
+  return this.http.get(`${this.api}/paged`);
+}
 
+updateStatus(data: any) {
+  return this.http.put(`${this.api}/status`, data);
+}
  getMyTickets() {
   return this.http.get(this.api);
 }
 
-  getAllTickets() {
-    return this.http.get(this.api);
-  }
+  
 }
