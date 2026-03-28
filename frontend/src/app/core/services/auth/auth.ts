@@ -24,7 +24,7 @@ export class AuthService {
     // return of({ token: 'fake-jwt-token-for-' + credentials.email });
   }
 
-   
+
 
 getRoleFromToken(token: string) {
   try {
@@ -32,10 +32,15 @@ getRoleFromToken(token: string) {
 
     console.log("Decoded Token:", decoded);
 
-    return decoded.role 
-        || decoded.Role 
-        || decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+    const role =
+      decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+      || decoded.role
+      || decoded.Role;
 
+    console.log("EXTRACTED ROLE:", role);
+
+    return role;
+    
   } catch (error) {
     console.error("Invalid token");
     return null;

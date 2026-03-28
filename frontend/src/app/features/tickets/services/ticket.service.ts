@@ -10,9 +10,16 @@ export class TicketService {
 
   constructor(private http: HttpClient) {}
 
-  createTicket(data: any) {
-    return this.http.post(this.api, data);
-  }
+ createTicket(data: any) {
+  const payload = {
+    title: data.title,
+    description: data.description,
+    priority: data.priority
+  };
+
+  return this.http.post(this.api, payload);
+}
+
 
   getMyTickets() {
     return this.http.get(`${this.api}/my`);

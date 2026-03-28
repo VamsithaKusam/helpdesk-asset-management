@@ -20,18 +20,23 @@ export class CreateTicket {
 
   constructor(private ticketService: TicketService) {}
 
-  onSubmit() {
-    if (this.ticketForm.valid) {
-      this.ticketService.createTicket(this.ticketForm.value)
-        .subscribe({
-          next: () => {
-            alert('Ticket created successfully');
-            this.ticketForm.reset();
-          },
-          error: () => {
-            alert('Error creating ticket');
-          }
-        });
-    }
+ onSubmit() {
+  if (this.ticketForm.valid) {
+
+    console.log("FORM DATA:", this.ticketForm.value); // debug
+
+    this.ticketService.createTicket(this.ticketForm.value)
+      .subscribe({
+        next: (res) => {
+          console.log("SUCCESS:", res);
+          alert('Ticket created successfully');
+          this.ticketForm.reset();
+        },
+        error: (err) => {
+          console.error("ERROR:", err);
+          alert('Failed to create ticket');
+        }
+      });
   }
+}
 }
