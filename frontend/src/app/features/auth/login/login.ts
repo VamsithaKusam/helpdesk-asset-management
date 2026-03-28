@@ -20,25 +20,26 @@ export class Login {
   });
 
   constructor(private router: Router, private authService: AuthService) {}
-
-  onSubmit() {
-    if (this.loginForm.valid) {
+onSubmit() {
+  if (this.loginForm.valid) {
+    
+    this.authService.login(this.loginForm.value).subscribe((response: any) => {
       
-      this.authService.login(this.loginForm.value).subscribe((response: any) => {
-        
-        const token = response.token;
-        localStorage.setItem('authToken', token); 
-        
-        const userRole = this.authService.getRoleFromToken(token);
+      const token = response.token;
+      localStorage.setItem('authToken', token); 
+      
+      const userRole = this.authService.getRoleFromToken(token);
 
-        if (userRole === 'Admin') {
-          this.router.navigate(['/admin']);
-        } else if (userRole === 'Employee') {
-          this.router.navigate(['/employee']);
-        } else {
-          alert('Error: Unauthorized Role');
-        }
-      });
-    }
+      console.log("ROLE:", userRole); // ✅ ADD HERE
+
+      if (userRole === 'Admin') {
+        this.router.navigate(['/admin']);
+      } else if (userRole === 'Employee') {
+        this.router.navigate(['/employee']);
+      } else {
+        alert('Error: Unauthorized Role');
+      }
+    });
   }
+}
 }

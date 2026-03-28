@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +24,21 @@ export class AuthService {
     // return of({ token: 'fake-jwt-token-for-' + credentials.email });
   }
 
-  // We will update this later to decode the REAL JWT token from .NET
-  getRoleFromToken(token: string) {
-    if (token.includes('manager') || token.includes('admin')) {
-      return 'Admin';
-    }
-    return 'Employee';
+   
+
+getRoleFromToken(token: string) {
+  try {
+    const decoded: any = jwtDecode(token);
+
+    console.log("Decoded Token:", decoded);
+
+    return decoded.role 
+        || decoded.Role 
+        || decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+  } catch (error) {
+    console.error("Invalid token");
+    return null;
   }
+}
 }

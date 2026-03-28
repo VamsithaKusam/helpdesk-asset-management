@@ -16,8 +16,9 @@ export class AdminDashboard {
 
   constructor(private router: Router) {} // Inject Router
 
-  logout() {
-    localStorage.removeItem('authToken'); // Destroy the token
-    this.router.navigate(['/auth']);      // Kick them to login
-  }
+ logout() {
+  console.log("Cleaning up session...");
+  localStorage.removeItem('authToken');
+  this.router.navigate(['/auth']);
+}
 }

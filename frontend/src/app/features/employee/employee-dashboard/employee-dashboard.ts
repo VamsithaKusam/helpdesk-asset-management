@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -11,4 +12,10 @@ import { CommonModule } from '@angular/common';
 export class EmployeeDashboard {
   employeeName = 'John Doe';
   myActiveTickets = 3;
+  constructor(private router: Router) {}
+logout() {
+  console.log("Cleaning up session...");
+  localStorage.removeItem('authToken');
+  this.router.navigate(['/auth']);
+}
 }

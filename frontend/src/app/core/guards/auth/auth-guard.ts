@@ -1,18 +1,27 @@
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
+import { AuthService } from '../../services/auth/auth';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  
-  // Check if the user has a token in their browser storage
+  const authService = inject(AuthService);
+
   const token = localStorage.getItem('authToken');
 
-  if (token) {
-    // They have a token! Open the door.
-    return true;
-  } else {
-    // No token? Kick them back to the login screen.
+  if (!token) {
     router.navigate(['/auth']);
     return false;
   }
+
+  const role = authService.getRoleFromToken(token);
+
+  const expectedRole = route.data?.['role'];
+
+  if (expectedRole && role !== expectedRole) {
+    console.warn("Access denied: role mismatch");
+    router.navigate(['/auth']);
+    return false;
+  }
+
+  return true;
 };
