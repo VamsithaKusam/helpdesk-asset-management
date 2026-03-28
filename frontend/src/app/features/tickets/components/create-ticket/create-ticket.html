@@ -1,0 +1,19 @@
+<div class="ticket-container">
+  <h2>Create Ticket</h2>
+
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+
+    <input type="text" placeholder="Title" formControlName="title">
+
+    <textarea placeholder="Description" formControlName="description"></textarea>
+
+    <select formControlName="priority">
+      <option>Low</option>
+      <option>Medium</option>
+      <option>High</option>
+    </select>
+
+    <button type="submit">Create</button>
+
+  </form>
+</div>

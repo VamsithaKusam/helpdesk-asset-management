@@ -18,4 +18,7 @@ logout() {
   localStorage.removeItem('authToken');
   this.router.navigate(['/auth']);
 }
+goToCreateTicket() {
+  this.router.navigate(['/create-ticket']);
+}
 }
