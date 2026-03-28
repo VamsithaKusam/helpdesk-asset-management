@@ -28,5 +28,11 @@ export const routes: Routes = [
   data: { role: 'Employee' },  
   loadComponent: () => import('./features/tickets/components/create-ticket/create-ticket').then(c => c.CreateTicket)
 },
+{
+  path: 'my-tickets',
+  canActivate: [authGuard],
+  data: { role: 'Employee' },
+  loadComponent: () => import('./features/tickets/components/ticket-list/ticket-list').then(c => c.TicketList)
+},
  { path: '**', redirectTo: 'auth' }
 ];

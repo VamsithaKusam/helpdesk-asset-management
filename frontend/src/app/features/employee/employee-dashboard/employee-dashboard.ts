@@ -21,4 +21,7 @@ logout() {
 goToCreateTicket() {
   this.router.navigate(['/create-ticket']);
 }
+goToTickets() {
+  this.router.navigate(['/my-tickets']);
+}
 }

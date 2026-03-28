@@ -21,9 +21,9 @@ export class TicketService {
 }
 
 
-  getMyTickets() {
-    return this.http.get(`${this.api}/my`);
-  }
+ getMyTickets() {
+  return this.http.get(this.api);
+}
 
   getAllTickets() {
     return this.http.get(this.api);
