@@ -23,6 +23,7 @@ namespace Helpdesk.API
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<TicketService>();
+            builder.Services.AddScoped<AssetService>();
 
 
             builder.Services.AddControllers();

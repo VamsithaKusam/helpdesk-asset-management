@@ -3,6 +3,8 @@ using Helpdesk.API.DTOs;
 using Helpdesk.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.Data.SqlClient;
+
 
 namespace Helpdesk.API.Services
 {
@@ -100,5 +102,45 @@ namespace Helpdesk.API.Services
             return ticket;
         }
 
-    }
+
+
+        // 1. Pagination Stored Procedure Call
+        public async Task<List<TicketDTO>> GetAdminTicketsPaged(TicketQueryDTO query)
+            {
+                var pageNum = new SqlParameter("@PageNumber", query.PageNumber);
+                var pageSize = new SqlParameter("@PageSize", query.PageSize);
+                var sortCol = new SqlParameter("@SortColumn", query.SortColumn);
+                var sortDir = new SqlParameter("@SortDirection", query.SortDirection);
+
+                // Using raw SQL to execute the stored procedure
+                var tickets = await _context.Database.SqlQueryRaw<TicketDTO>(
+                    "EXEC GetAdminTicketsPaged @PageNumber, @PageSize, @SortColumn, @SortDirection",
+                    pageNum, pageSize, sortCol, sortDir).ToListAsync();
+
+                return tickets;
+            }
+
+            // 2. Full-Text Search Call
+            public async Task<List<TicketDTO>> SearchTickets(string searchTerm)
+            {
+                var searchParam = new SqlParameter("@SearchTerm", $"\"{searchTerm}*\"");
+
+                // CONTAINS is the SQL keyword for Full-Text Search
+                var sql = @"
+                SELECT t.Id, t.Title, t.Description, t.Status, u.Name AS UserName
+                FROM Tickets t
+                INNER JOIN Users u ON t.UserId = u.Id
+                WHERE CONTAINS((t.Title, t.Description), @SearchTerm)";
+
+                return await _context.Database.SqlQueryRaw<TicketDTO>(sql, searchParam).ToListAsync();
+            }
+
+            // 3. Data Archival Stored Procedure Call
+            public async Task<string> ArchiveOldTickets()
+            {
+                await _context.Database.ExecuteSqlRawAsync("EXEC ArchiveOldResolvedTickets");
+                return "Old resolved tickets archived successfully.";
+            }
+
+}
 }
