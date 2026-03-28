@@ -1,0 +1,81 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #34495e; /* Slightly lighter blue than Admin */
+  color: white;
+  padding: 20px;
+
+  h2 { margin-bottom: 30px; text-align: center; font-size: 20px; }
+  
+  ul { list-style: none; padding: 0; }
+  li { margin-bottom: 15px; }
+  a { color: #ecf0f1; text-decoration: none; font-size: 16px; transition: color 0.3s;}
+  a:hover { color: #2ecc71; } /* Green hover for employees */
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+
+    h1 { margin: 0; color: #333; }
+
+    .logout-btn {
+      padding: 8px 16px;
+      background-color: #7f8c8d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+
+      &:hover { background-color: #95a5a6; }
+    }
+  }
+}
+
+.stats-grid {
+  display: flex;
+  gap: 20px;
+
+  .stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h3 { margin: 0 0 10px 0; color: #7f8c8d; }
+    .stat-number { font-size: 32px; font-weight: bold; margin: 0; color: #34495e; }
+  }
+
+  .action-btn {
+    padding: 12px 20px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+
+    &:hover { background-color: #27ae60; }
+  }
+}

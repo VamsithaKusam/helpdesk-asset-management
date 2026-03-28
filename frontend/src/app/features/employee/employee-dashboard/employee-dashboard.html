@@ -1,0 +1,33 @@
+<div class="dashboard-container">
+  <!-- Employee Sidebar -->
+  <aside class="sidebar employee-sidebar">
+    <h2>Employee Portal</h2>
+    <nav>
+      <ul>
+        <li><a href="#">My Dashboard</a></li>
+        <li><a href="#">My Assigned Assets</a></li>
+        <li><a href="#">My Tickets</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header>
+      <h1>Welcome, {{ employeeName }}</h1>
+      <button class="logout-btn">Logout</button>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <h3>My Active Tickets</h3>
+        <p class="stat-number">{{ myActiveTickets }}</p>
+      </div>
+      
+      <div class="stat-card action-card">
+        <h3>Need IT Help?</h3>
+        <button class="action-btn">Create New Ticket</button>
+      </div>
+    </section>
+  </main>
+</div>
