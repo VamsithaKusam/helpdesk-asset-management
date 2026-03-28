@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router'; // Import Router
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -12,4 +13,11 @@ export class AdminDashboard {
   adminName = 'IT Manager';
   totalAssets = 142;
   pendingTickets = 18;
+
+  constructor(private router: Router) {} // Inject Router
+
+  logout() {
+    localStorage.removeItem('authToken'); // Destroy the token
+    this.router.navigate(['/auth']);      // Kick them to login
+  }
 }
