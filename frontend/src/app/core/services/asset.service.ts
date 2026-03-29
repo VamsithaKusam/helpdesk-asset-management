@@ -27,4 +27,15 @@ export class AssetService {
   returnAsset(assetId: number) {
     return this.http.post(`${this.apiUrl}/return/${assetId}`, {});
   }
+  getArchivedAssets() {
+  return this.http.get<any[]>(`${this.apiUrl}/assets/archived`);
+}
+
+archiveAsset(id: number) {
+  return this.http.post(`${this.apiUrl}/assets/archive/${id}`, {});
+}
+
+restoreAsset(id: number) {
+  return this.http.post(`${this.apiUrl}/assets/restore/${id}`, {});
+}
 }

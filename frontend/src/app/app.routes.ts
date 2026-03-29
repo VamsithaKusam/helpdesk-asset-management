@@ -60,5 +60,6 @@ export const routes: Routes = [
   data: { role: 'Employee' }, 
   loadComponent: () => import('./features/employee/my-assets/my-assets').then(c => c.MyAssets) 
 },
+
  { path: '**', redirectTo: 'auth' }
 ];
