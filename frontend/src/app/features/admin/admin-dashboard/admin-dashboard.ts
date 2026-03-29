@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TicketService } from '../../tickets/services/ticket.service';
@@ -19,11 +19,11 @@ export class AdminDashboard implements OnInit {
   constructor(
     private router: Router, 
     private ticketService: TicketService,
-    private assetService: AssetService // Inject AssetService here
+    private assetService: AssetService,
+    private cdr: ChangeDetectorRef 
   ) {}
-
-  ngOnInit() {
-    // 1. Native, crash-proof JWT Decoder
+ngOnInit() {
+    // 1. JWT Decoder
     const token = localStorage.getItem('authToken');
     if (token) {
       try {
@@ -35,14 +35,19 @@ export class AdminDashboard implements OnInit {
     // 2. Load Real Ticket Count
     this.ticketService.getAllTickets().subscribe(tickets => {
       this.pendingTickets = tickets.filter(t => t.status === 'Open' || t.status === 'In Progress').length;
+      
+    
+      this.cdr.detectChanges(); 
     });
 
     // 3. Load Real Asset Count
     this.assetService.getAllAssets().subscribe(assets => {
       this.totalAssets = assets.length;
+      
+      
+      this.cdr.detectChanges(); 
     });
   }
-
   goToAdminTickets() { this.router.navigate(['/admin-tickets']); }
   goToManageUsers() { this.router.navigate(['/manage-users']); }
   goToManageAssets() { this.router.navigate(['/manage-assets']); }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TicketService } from '../../tickets/services/ticket.service';
@@ -15,7 +15,9 @@ export class EmployeeDashboard implements OnInit {
   employeeName = 'Employee';
   myActiveTickets = 0;
 
-  constructor(private router: Router, private ticketService: TicketService) {}
+  constructor(private router: Router, private ticketService: TicketService, private cdr: ChangeDetectorRef) {
+    
+  }
 ngOnInit() {
     // 1. Get real name from Token
     const token = localStorage.getItem('authToken');
@@ -40,6 +42,7 @@ ngOnInit() {
         } else {
           this.myActiveTickets = 0;
         }
+        this.cdr.detectChanges();
       },
       error: (err) => console.error("Error loading tickets for dashboard", err)
     });
