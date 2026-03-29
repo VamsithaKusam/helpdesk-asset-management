@@ -4,10 +4,10 @@
     <h2>Helpdesk Admin</h2>
     <nav>
       <ul>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Manage Assets</a></li>
+        <li><a (click)="goToDashboard()" style="cursor: pointer;">Dashboard</a></li>
+        <li><a (click)="goToManageAssets()" style="cursor: pointer;">Manage Assets</a></li>
         <li><a (click)="goToAdminTickets()">Helpdesk Tickets</a></li>
-        <li><a href="#">User Roles</a></li>
+       <li><a (click)="goToManageUsers()" style="cursor: pointer;">User Roles</a></li>
       </ul>
     </nav>
   </aside>

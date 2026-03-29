@@ -1,14 +1,20 @@
 <div class="ticket-list">
   <h2>My Tickets</h2>
 
-  <div *ngIf="tickets.length === 0">
-    No tickets found
-  </div>
+  <ng-container *ngIf="tickets$ | async as tickets">
+    
+    <div *ngIf="tickets.length === 0">
+      No tickets found
+    </div>
 
-  <div *ngFor="let ticket of tickets" class="ticket-card">
-    <h3>{{ ticket.title }}</h3>
-    <p>{{ ticket.description }}</p>
-    <span>Priority: {{ ticket.priority }}</span>
-    <span>Status: {{ ticket.status }}</span>
-  </div>
+    <div *ngFor="let ticket of tickets" class="ticket-card">
+      <h3>{{ ticket.title }}</h3>
+      <p>{{ ticket.description }}</p>
+      
+      <span>Priority: {{ ticket.priority }}</span>
+      <br>
+      <span>Status: {{ ticket.status }}</span>
+    </div>
+
+  </ng-container>
 </div>

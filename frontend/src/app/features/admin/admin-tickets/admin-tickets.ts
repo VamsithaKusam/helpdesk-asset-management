@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TicketService } from '../../tickets/services/ticket.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-tickets',
@@ -11,36 +12,33 @@ import { TicketService } from '../../tickets/services/ticket.service';
 })
 export class AdminTickets implements OnInit {
 
-  tickets: any[] = [];
+  tickets$!: Observable<any[]>;   
 
   constructor(private ticketService: TicketService) {}
 
   ngOnInit() {
-    this.loadTickets();
+    this.tickets$ = this.ticketService.getAllTickets();  
   }
 
-  loadTickets() {
-    this.ticketService.getAllTickets().subscribe({
-      next: (res: any) => {
-        console.log("ALL TICKETS:", res);
-        this.tickets = res.data || res;
-      },
-      error: (err) => console.error(err)
-    });
-  }
+  changeStatus(ticketId: any, status: string) {
+    if (!ticketId) {
+      alert("Error: Ticket ID is missing.");
+      return;
+    }
 
-  changeStatus(ticketId: number, status: string) {
     const payload = {
-      ticketId: ticketId,
-      status: status
+      TicketId: Number(ticketId),
+      Status: status.trim()
     };
 
     this.ticketService.updateStatus(payload).subscribe({
       next: () => {
         alert('Status updated');
-        this.loadTickets();
+        this.tickets$ = this.ticketService.getAllTickets(); // reload
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error("ERROR RESPONSE:", err);
+      }
     });
   }
 }

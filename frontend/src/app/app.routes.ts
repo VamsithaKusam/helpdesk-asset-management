@@ -12,12 +12,14 @@ export const routes: Routes = [
     path: 'admin', 
     // 2. Add the guard here!
     canActivate: [authGuard], 
+      data: { role: 'Admin' },
     loadComponent: () => import('./features/admin/admin-dashboard/admin-dashboard').then(c => c.AdminDashboard) 
   },
   { 
     path: 'employee', 
     // 3. Add the guard here too!
     canActivate: [authGuard], 
+    data: { role: 'Employee' },  
     loadComponent: () => import('./features/employee/employee-dashboard/employee-dashboard').then(c => c.EmployeeDashboard) 
   },
 
@@ -39,6 +41,24 @@ export const routes: Routes = [
   canActivate: [authGuard],
   data: { role: 'Admin' },
   loadComponent: () => import('./features/admin/admin-tickets/admin-tickets').then(c => c.AdminTickets)
+},
+{
+  path: 'manage-users',
+  canActivate: [authGuard],
+  data: { role: 'Admin' },
+  loadComponent: () => import('./features/admin/manage-users/manage-users').then(c => c.ManageUsers)
+},
+{
+  path: 'manage-assets',
+  canActivate: [authGuard],
+  data: { role: 'Admin' },
+  loadComponent: () => import('./features/admin/manage-assets/manage-assets').then(c => c.ManageAssets)
+},
+{ 
+  path: 'my-assets', 
+  canActivate: [authGuard], 
+  data: { role: 'Employee' }, 
+  loadComponent: () => import('./features/employee/my-assets/my-assets').then(c => c.MyAssets) 
 },
  { path: '**', redirectTo: 'auth' }
 ];

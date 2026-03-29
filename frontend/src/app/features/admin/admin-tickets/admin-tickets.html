@@ -1,25 +1,24 @@
-<div class="admin-tickets">
-  <h2>All Tickets</h2>
+<div class="ticket-list">
+  <h2>My Tickets</h2>
 
-  <div *ngFor="let ticket of tickets" class="ticket-card">
+  <!-- 1. The async pipe subscribes to the data and unwraps it -->
+  <ng-container *ngIf="tickets$ | async as tickets">
+    
+    <!-- 2. Show this if the array is empty -->
+    <div *ngIf="tickets.length === 0">
+      No tickets found
+    </div>
 
-    <h3>{{ ticket.title }}</h3>
+    <!-- 3. Loop through the unwrapped tickets array -->
+    <div *ngFor="let ticket of tickets" class="ticket-card">
+      <h3>{{ ticket.title }}</h3>
+      <p>{{ ticket.description }}</p>
+      
+      <!-- Priority will now officially show up! -->
+      <span>Priority: {{ ticket.priority }}</span>
+      <br>
+      <span>Status: {{ ticket.status }}</span>
+    </div>
 
-    <p>{{ ticket.description }}</p>
-
-    <span>Status: {{ ticket.status }}</span>
-
-    <br><br>
-
-    <select #status>
-      <option>Open</option>
-      <option>InProgress</option>
-      <option>Resolved</option>
-    </select>
-
-    <button (click)="changeStatus(ticket.id, status.value)">
-      Update Status
-    </button>
-
-  </div>
+  </ng-container>
 </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TicketService } from '../../services/ticket.service';
+import { Observable } from 'rxjs'; 
 
 @Component({
   selector: 'app-ticket-list',
@@ -11,26 +12,11 @@ import { TicketService } from '../../services/ticket.service';
 })
 export class TicketList implements OnInit {
 
-  tickets: any[] = [];
+  tickets$!: Observable<any[]>; 
 
   constructor(private ticketService: TicketService) {}
 
   ngOnInit() {
-    this.loadTickets();
-  }
-
-  loadTickets() {
-    this.ticketService.getMyTickets().subscribe({
-  next: (res: any) => {
-    console.log("FULL RESPONSE:", res);
-    console.log("TYPE:", typeof res);
-    console.log("IS ARRAY:", Array.isArray(res));
-
-    this.tickets = res;
-  },
-  error: (err) => {
-    console.error(err);
-  }
-});
+    this.tickets$ = this.ticketService.getMyTickets();
   }
 }
