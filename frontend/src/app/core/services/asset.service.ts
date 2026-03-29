@@ -23,4 +23,8 @@ export class AssetService {
  
   return this.http.post(this.apiUrl, asset);
 }
+// Call this when an employee wants to return a device
+  returnAsset(assetId: number) {
+    return this.http.post(`${this.apiUrl}/return/${assetId}`, {});
+  }
 }

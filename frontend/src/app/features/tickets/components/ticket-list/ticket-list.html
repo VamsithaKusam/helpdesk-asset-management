@@ -1,19 +1,25 @@
-<div class="ticket-list">
-  <h2>My Tickets</h2>
+<div style="max-width: 1000px; margin: auto; padding-top: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  
+  <div style="border-bottom: 3px solid var(--vc-orange); margin-bottom: 20px; padding-bottom: 10px;">
+    <h2 style="color: var(--vc-navy); margin: 0;">Helpdesk Tickets</h2>
+  </div>
 
   <ng-container *ngIf="tickets$ | async as tickets">
     
-    <div *ngIf="tickets.length === 0">
-      No tickets found
+    <div *ngIf="tickets.length === 0" style="background: white; padding: 30px; text-align: center; border-radius: 8px; color: #666; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+      No tickets found.
     </div>
 
-    <div *ngFor="let ticket of tickets" class="ticket-card">
-      <h3>{{ ticket.title }}</h3>
-      <p>{{ ticket.description }}</p>
-      
-      <span>Priority: {{ ticket.priority }}</span>
-      <br>
-      <span>Status: {{ ticket.status }}</span>
+    <div style="display: grid; gap: 15px;">
+      <div *ngFor="let ticket of tickets" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 6px solid var(--vc-navy);">
+        <h3 style="color: var(--vc-navy); margin-top: 0; margin-bottom: 10px;">{{ ticket.title }}</h3>
+        <p style="color: #555; margin-bottom: 15px; line-height: 1.5;">{{ ticket.description }}</p>
+        
+        <div style="display: flex; gap: 15px; font-size: 0.9em; font-weight: bold;">
+          <span style="background: #f4f7f9; padding: 6px 12px; border-radius: 4px; color: var(--vc-navy); border: 1px solid #ddd;">Priority: {{ ticket.priority }}</span>
+          <span style="background: #fff0eb; padding: 6px 12px; border-radius: 4px; color: var(--vc-orange); border: 1px solid #fbdad0;">Status: {{ ticket.status }}</span>
+        </div>
+      </div>
     </div>
 
   </ng-container>

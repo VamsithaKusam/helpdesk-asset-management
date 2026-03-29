@@ -20,14 +20,24 @@
     </header>
 
     <section class="stats-grid">
-      <div class="stat-card">
-        <h3>Total Assets</h3>
-        <p class="stat-number">{{ totalAssets }}</p>
-      </div>
-      <div class="stat-card">
-        <h3>Pending Tickets</h3>
-        <p class="stat-number">{{ pendingTickets }}</p>
-      </div>
+      <div style="max-width: 1000px; margin: auto; padding-top: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  
+  <div style="border-bottom: 3px solid var(--vc-orange); margin-bottom: 30px; padding-bottom: 10px;">
+    <h2 style="color: var(--vc-navy); margin: 0; font-size: 2em;">Welcome back, {{ adminName || 'Admin' }}</h2>
+  </div>
+
+  <div style="display: flex; gap: 30px; margin-top: 20px;">
+    <div style="background: white; padding: 30px; border-radius: 8px; flex: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border-top: 5px solid var(--vc-navy); text-align: center;">
+      <h3 style="color: #666; margin-top: 0; text-transform: uppercase; font-size: 1.1em; letter-spacing: 1px;">Total Assets</h3>
+      <p style="font-size: 3.5em; font-weight: bold; color: var(--vc-navy); margin: 15px 0;">{{ totalAssets || 0 }}</p>
+    </div>
+
+    <div style="background: white; padding: 30px; border-radius: 8px; flex: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border-top: 5px solid var(--vc-orange); text-align: center;">
+      <h3 style="color: #666; margin-top: 0; text-transform: uppercase; font-size: 1.1em; letter-spacing: 1px;">Pending Tickets</h3>
+      <p style="font-size: 3.5em; font-weight: bold; color: var(--vc-orange); margin: 15px 0;">{{ pendingTickets || 0 }}</p>
+    </div>
+  </div>
+</div>
     </section>
   </main>
 </div>

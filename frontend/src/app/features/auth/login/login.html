@@ -1,22 +1,21 @@
-<div class="login-container">
-  <div class="login-card">
-    <h2>Helpdesk Asset Management</h2>
-    <p>Please sign in to your account</p>
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background-color: var(--vc-navy); font-family: 'Segoe UI', sans-serif;">
+  
+  <div style="background: white; padding: 50px 40px; border-radius: 8px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); width: 100%; max-width: 400px; text-align: center; border-top: 8px solid var(--vc-orange);">
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email" placeholder="Enter your email">
-      </div>
+    <img src="/vc-logo.png" alt="Value Creed" style="height: 70px; margin-bottom: 20px;">
+    <h2 style="color: var(--vc-navy); margin-bottom: 30px; font-weight: 600;">IT Helpdesk Portal</h2>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" placeholder="Enter your password">
-      </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 20px;">
+      <input type="email" formControlName="email" placeholder="Email Address" 
+             style="width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; outline-color: var(--vc-orange); font-size: 1em;">
 
-      <button type="submit" [disabled]="loginForm.invalid">Login</button>
-      
+      <input type="password" formControlName="password" placeholder="Password" 
+             style="width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; outline-color: var(--vc-orange); font-size: 1em;">
+
+      <button type="submit" [disabled]="loginForm.invalid"
+              style="width: 100%; background-color: var(--vc-navy); color: white; border: none; padding: 16px; border-radius: 4px; font-weight: bold; font-size: 1.1em; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">
+        Sign In
+      </button>
     </form>
   </div>
 </div>

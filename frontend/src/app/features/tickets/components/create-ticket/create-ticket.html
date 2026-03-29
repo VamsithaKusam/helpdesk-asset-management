@@ -1,25 +1,28 @@
-<div class="ticket-container">
-  <h2>Create Ticket</h2>
+<div style="max-width: 600px; margin: auto; padding-top: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+  
+  <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border-top: 5px solid var(--vc-navy);">
+    <h2 style="color: var(--vc-navy); margin-top: 0; margin-bottom: 20px;">Submit IT Request</h2>
 
-  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
-
-    <div>
-      <input type="text" placeholder="Title" formControlName="title">
-    </div>
-
-    <div>
-      <textarea placeholder="Description" formControlName="description"></textarea>
-    </div>
-
-    <div>
-      <select formControlName="priority">
+    <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 15px;">
+      
+      <input type="text" placeholder="Issue Title (e.g., Cannot access email)" formControlName="title" 
+             style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);">
+      
+      <textarea placeholder="Please describe your issue in detail..." formControlName="description" rows="5" 
+                style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);"></textarea>
+      
+      <select formControlName="priority" style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);">
+        <option value="" disabled selected>Select Priority</option>
         <option value="Low">Low</option>
         <option value="Medium">Medium</option>
         <option value="High">High</option>
       </select>
-    </div>
 
-    <button type="submit">Create Ticket</button>
+      <button type="submit" [disabled]="ticketForm.invalid" 
+              style="background: var(--vc-navy); color: white; border: none; padding: 14px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">
+        Create Ticket
+      </button>
 
-  </form>
+    </form>
+  </div>
 </div>

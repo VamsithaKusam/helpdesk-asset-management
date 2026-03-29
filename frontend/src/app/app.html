@@ -1,1 +1,35 @@
-<router-outlet></router-outlet>
+<!-- ONLY SHOW NAVBAR IF LOGGED IN -->
+<nav *ngIf="isLoggedIn" style="background-color: var(--vc-navy); padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--vc-orange); box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  
+  <!-- Logo -->
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <img src="/vc-logo.png" alt="Value Creed Logo" style="height: 50px; background: white; padding: 5px; border-radius: 4px;">
+    <span style="color: white; font-size: 1.5em; font-weight: bold; letter-spacing: 1px;">IT Helpdesk</span>
+  </div>
+  
+  <!-- Role-Based Navigation Links -->
+  <div style="display: flex; gap: 20px; align-items: center;">
+    
+    <!-- ADMIN LINKS -->
+    <ng-container *ngIf="userRole === 'Admin'">
+      <a routerLink="/admin-dashboard" style="color: white; text-decoration: none; font-weight: 500;">Dashboard</a>
+      <a routerLink="/manage-assets" style="color: white; text-decoration: none; font-weight: 500;">Assets</a>
+    </ng-container>
+
+    <!-- EMPLOYEE LINKS -->
+    <ng-container *ngIf="userRole === 'Employee'">
+      <a routerLink="/employee-dashboard" style="color: white; text-decoration: none; font-weight: 500;">My Dashboard</a>
+      <a routerLink="/my-assets" style="color: white; text-decoration: none; font-weight: 500;">My Devices</a>
+    </ng-container>
+    
+    <!-- Unified Logout Button -->
+    <button (click)="logout()" style="background-color: var(--vc-orange); color: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+      Logout
+    </button>
+  </div>
+</nav>
+
+<!-- If logged out, remove the padding so the login screen fills the page! -->
+<div [style.padding]="isLoggedIn ? '20px' : '0'">
+  <router-outlet></router-outlet>
+</div>
