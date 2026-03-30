@@ -1,26 +1,53 @@
-<div style="max-width: 1000px; margin: auto; padding-top: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<div style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
   
-  <div style="border-bottom: 3px solid var(--vc-orange); margin-bottom: 20px; padding-bottom: 10px;">
-    <h2 style="color: var(--vc-navy); margin: 0;">Helpdesk Tickets</h2>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+    <h2 style="color: var(--vc-navy); margin: 0;">Ticket Management</h2>
+    
+    <div style="position: relative; width: 350px;">
+      <input type="text" [formControl]="searchControl" placeholder="Search by Ticket ID, Title, or User..." 
+             style="width: 100%; padding: 12px 15px 12px 40px; border: 2px solid #e0e0e0; border-radius: 25px; outline: none; transition: border-color 0.3s; box-sizing: border-box;"
+             onfocus="this.style.borderColor='var(--vc-orange)'" 
+             onblur="this.style.borderColor='#e0e0e0'">
+      
+      <span style="position: absolute; left: 15px; top: 12px; color: var(--vc-navy); opacity: 0.6;">
+        &#128269;
+      </span>
+
+      <span *ngIf="isLoading" style="position: absolute; right: 15px; top: 12px; color: var(--vc-orange); font-size: 0.8em; font-weight: bold;">
+        Searching...
+      </span>
+    </div>
   </div>
 
-  <ng-container *ngIf="tickets$ | async as tickets">
+  <div style="background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead style="background-color: var(--vc-navy); color: white;">
+        <tr>
+          <th style="padding: 15px;">ID</th>
+          <th style="padding: 15px;">Title</th>
+          <th style="padding: 15px;">Requested By</th>
+          <th style="padding: 15px;">Priority</th>
+          <th style="padding: 15px;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of tickets$ | async" style="border-bottom: 1px solid #eee; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f9f9f9'" onmouseout="this.style.backgroundColor='transparent'">
+          <td style="padding: 15px; color: var(--vc-navy); font-weight: bold;">{{ticket.id}}</td>
+          <td style="padding: 15px;">{{ticket.title}}</td>
+          <td style="padding: 15px;">{{ticket.userName}}</td>
+          <td style="padding: 15px;">
+            <span [ngStyle]="{'color': ticket.priority === 'High' ? '#e74c3c' : (ticket.priority === 'Medium' ? 'var(--vc-orange)' : '#2ecc71')}">
+              {{ticket.priority}}
+            </span>
+          </td>
+          <td style="padding: 15px;">{{ticket.status}}</td>
+        </tr>
+      </tbody>
+    </table>
     
-    <div *ngIf="tickets.length === 0" style="background: white; padding: 30px; text-align: center; border-radius: 8px; color: #666; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-      No tickets found.
+    <div *ngIf="(tickets$ | async)?.length === 0 && !isLoading" style="padding: 30px; text-align: center; color: #777;">
+      No tickets match your search criteria.
     </div>
+  </div>
 
-    <div style="display: grid; gap: 15px;">
-      <div *ngFor="let ticket of tickets" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 6px solid var(--vc-navy);">
-        <h3 style="color: var(--vc-navy); margin-top: 0; margin-bottom: 10px;">{{ ticket.title }}</h3>
-        <p style="color: #555; margin-bottom: 15px; line-height: 1.5;">{{ ticket.description }}</p>
-        
-        <div style="display: flex; gap: 15px; font-size: 0.9em; font-weight: bold;">
-          <span style="background: #f4f7f9; padding: 6px 12px; border-radius: 4px; color: var(--vc-navy); border: 1px solid #ddd;">Priority: {{ ticket.priority }}</span>
-          <span style="background: #fff0eb; padding: 6px 12px; border-radius: 4px; color: var(--vc-orange); border: 1px solid #fbdad0;">Status: {{ ticket.status }}</span>
-        </div>
-      </div>
-    </div>
-
-  </ng-container>
 </div>

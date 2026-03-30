@@ -1,0 +1,35 @@
+<div class="container">
+
+  <h2>Audit Logs</h2>
+
+  <ng-container *ngIf="logs$ | async as logs">
+
+    <div *ngIf="logs.length === 0" class="empty">
+      No audit logs found
+    </div>
+
+    <table *ngIf="logs.length > 0">
+      <thead>
+        <tr>
+          <th>Ticket</th>
+          <th>Old Status</th>
+          <th>New Status</th>
+          <th>User</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>#{{ log.ticketId }}</td>
+          <td>{{ log.oldStatus }}</td>
+          <td>{{ log.newStatus }}</td>
+          <td>{{ log.userName || log.changedByUserId }}</td>
+          <td>{{ log.changedAt | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </ng-container>
+
+</div>

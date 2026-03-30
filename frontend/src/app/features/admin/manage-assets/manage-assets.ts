@@ -16,10 +16,7 @@ import { RouterLink } from '@angular/router';
       <!-- Header -->
       <div style="border-bottom: 3px solid var(--vc-orange); margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
         <h2 style="color: var(--vc-navy); margin: 0;">Asset Management</h2>
-        <!-- NAVIGATION TO ARCHIVE -->
-        <a routerLink="/admin/archived" style="text-decoration: none; background: #6c757d; color: white; padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 0.9em;">
-          View Retired/Archived
-        </a>
+       
       </div>
 
       <!-- Stats -->
@@ -74,11 +71,7 @@ import { RouterLink } from '@angular/router';
                 Assign
               </button>
 
-              <!-- ARCHIVE BUTTON (The new addition) -->
-              <button (click)="archive(asset.id)" 
-                      style="background: transparent; color: #dc3545; border: 2px solid #dc3545; padding: 6px 12px; cursor: pointer; border-radius: 20px; font-weight: bold; width: 100px;">
-                Archive
-              </button>
+            
             </div>
 
             <!-- SHOW EMPLOYEE NAME IF ASSIGNED -->

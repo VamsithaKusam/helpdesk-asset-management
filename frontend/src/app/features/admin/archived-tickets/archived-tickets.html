@@ -1,0 +1,23 @@
+<div class="container">
+
+  <h2>Archived Tickets</h2>
+
+  <ng-container *ngIf="archivedTickets$ | async as tickets">
+
+    <div *ngIf="tickets.length === 0" class="empty">
+      No archived tickets
+    </div>
+
+    <div class="card" *ngFor="let ticket of tickets">
+      <h3>{{ ticket.title }}</h3>
+      <p>{{ ticket.description }}</p>
+
+      <div class="meta">
+        <span>{{ ticket.priority }}</span>
+        <span>{{ ticket.status }}</span>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>
