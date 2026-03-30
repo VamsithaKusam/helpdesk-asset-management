@@ -47,12 +47,22 @@ ngOnInit() {
       error: (err) => console.error("Error loading tickets for dashboard", err)
     });
   }
-  goToCreateTicket() { this.router.navigate(['/create-ticket']); }
-  goToTickets() { this.router.navigate(['/my-tickets']); }
-  goToMyAssets() { this.router.navigate(['/my-assets']); } // We will create this next!
+ goToCreateTicket() { 
+    this.router.navigate(['/employee/create-ticket']); 
+  }
+  
+  goToTickets() { 
+    this.router.navigate(['/employee/my-tickets']); 
+  }
+  
+  goToMyAssets() { 
+    this.router.navigate(['/employee/my-assets']); 
+  }
+  
   goToDashboard() { 
-  this.router.navigate(['/employee']); 
-}
+    this.router.navigate(['/employee/dashboard']); 
+  }
+
   logout() {
     localStorage.removeItem('authToken');
     this.router.navigate(['/auth']);

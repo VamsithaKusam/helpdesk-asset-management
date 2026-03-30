@@ -1,61 +1,60 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { BaseChartDirective } from 'ng2-charts';
+import { ChartOptions } from 'chart.js';
 import { TicketService } from '../../tickets/services/ticket.service';
-import { AssetService } from '../../../core/services/asset.service'; // Add this!
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BaseChartDirective],
   templateUrl: './admin-dashboard.html',
   styleUrls: ['./admin-dashboard.scss']
 })
 export class AdminDashboard implements OnInit {
-  adminName = 'Admin';
-  totalAssets = 0; 
-  pendingTickets = 0;
+  pendingTicketsCount: number = 0;// New variable
+  totalAssetsCount: number = 0;
+  // ✅ Re-adding the missing options variables
+  public pieChartOptions: ChartOptions<'pie'> = { 
+    responsive: true,
+    plugins: { legend: { display: true, position: 'bottom' } }
+  };
 
-  constructor(
-    private router: Router, 
-    private ticketService: TicketService,
-    private assetService: AssetService,
-    private cdr: ChangeDetectorRef 
-  ) {}
+  public barChartOptions: ChartOptions<'bar'> = { 
+    responsive: true,
+    scales: { y: { beginAtZero: true } }
+  };
+
+  public pieChartLabels: string[] = [];
+  public pieChartDatasets: any[] = [{ data: [], backgroundColor: ['#1f3a5f', '#f26522', '#64748b'] }];
+  
+  public barChartLabels: string[] = [];
+  public barChartDatasets: any[] = [{ data: [], label: 'Tickets', backgroundColor: '#f26522' }];
+
+  constructor(private ticketService: TicketService, private cdr: ChangeDetectorRef) {}
+// Inside AdminDashboard class
+totalActiveTickets: number = 0;
+
 ngOnInit() {
-    // 1. JWT Decoder
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        this.adminName = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']?.split('@')[0] || 'Admin';
-      } catch (e) { console.error("Token parse error"); }
-    }
+    this.ticketService.getStats().subscribe({
+      next: (stats: any) => {
+        // 1. Map Chart Data
+        this.pieChartLabels = stats.assetStats?.map((a: any) => a.label || a.Label) || [];
+        this.pieChartDatasets[0].data = stats.assetStats?.map((a: any) => a.count || a.Count) || [];
 
-    // 2. Load Real Ticket Count
-    this.ticketService.getAllTickets().subscribe(tickets => {
-      this.pendingTickets = tickets.filter(t => t.status === 'Open' || t.status === 'In Progress').length;
-      
-    
-      this.cdr.detectChanges(); 
-    });
+        this.barChartLabels = stats.ticketStats?.map((t: any) => t.label || t.Label) || [];
+        this.barChartDatasets[0].data = stats.ticketStats?.map((t: any) => t.count || t.Count) || [];
 
-    // 3. Load Real Asset Count
-    this.assetService.getAllAssets().subscribe(assets => {
-      this.totalAssets = assets.length;
-      
-      
-      this.cdr.detectChanges(); 
+        // 2. Calculate "Pending" (Total minus Resolved)
+        const pendingData = stats.ticketStats?.filter((t: any) => 
+          (t.label || t.Label).toLowerCase() !== 'resolved'
+        ) || [];
+        this.pendingTicketsCount = pendingData.reduce((acc: number, curr: any) => acc + (curr.count || curr.Count || 0), 0);
+        
+        this.totalAssetsCount = this.pieChartDatasets[0].data.reduce((a: any, b: any) => a + b, 0);
+
+        this.cdr.detectChanges();
+      }
     });
-  }
-  goToAdminTickets() { this.router.navigate(['/admin-tickets']); }
-  goToManageUsers() { this.router.navigate(['/manage-users']); }
-  goToManageAssets() { this.router.navigate(['/manage-assets']); }
-  goToDashboard() { 
-  this.router.navigate(['/admin']); 
-}
-  logout() {
-    localStorage.removeItem('authToken');
-    this.router.navigate(['/auth']);
   }
 }

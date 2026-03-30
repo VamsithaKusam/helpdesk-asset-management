@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { Observable } from 'rxjs'; // ✅ Add this line
 @Injectable({
   providedIn: 'root'
 })
@@ -44,5 +44,9 @@ export class TicketService {
   }
   getAuditLogs() {
   return this.http.get<any[]>(`${this.api}/audit-logs`);
+}
+getStats(): Observable<any> {
+  // This hits the new [HttpGet("stats")] endpoint we just made in .NET
+  return this.http.get<any>(`${this.api}/stats`);
 }
 }
