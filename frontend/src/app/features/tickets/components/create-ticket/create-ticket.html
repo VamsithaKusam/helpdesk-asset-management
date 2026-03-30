@@ -1,4 +1,4 @@
-<div style="max-width: 600px; margin: auto; padding-top: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<div style="max-width: 700px; margin: auto; padding-top: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
   
   <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border-top: 5px solid var(--vc-navy);">
     <h2 style="color: var(--vc-navy); margin-top: 0; margin-bottom: 20px;">Submit IT Request</h2>
@@ -8,18 +8,54 @@
       <input type="text" placeholder="Issue Title (e.g., Cannot access email)" formControlName="title" 
              style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);">
       
-      <textarea placeholder="Please describe your issue in detail..." formControlName="description" rows="5" 
+      <!-- Dynamic Category Selection -->
+      <div style="display: flex; gap: 15px;">
+        <select formControlName="category" style="flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);">
+          <option value="" disabled selected>Select Issue Category</option>
+          <option value="Hardware Issue">Hardware Issue</option>
+          <option value="Software Issue">Software Issue</option>
+          <option value="Network Issue">Network Issue</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <select formControlName="priority" style="flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);">
+          <option value="Low">Low Priority</option>
+          <option value="Medium">Medium Priority</option>
+          <option value="High">High Priority</option>
+        </select>
+      </div>
+
+      <!-- Conditionally shown Asset ID input -->
+      <div *ngIf="ticketForm.get('category')?.value === 'Hardware Issue'" style="background: #f4f7f9; padding: 15px; border-left: 4px solid var(--vc-orange); border-radius: 4px;">
+        <label style="color: var(--vc-navy); font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 8px;">Asset Tag Required</label>
+        <input type="text" placeholder="Enter Asset Tag (e.g., MAC-001)" formControlName="assetId" 
+               style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange); box-sizing: border-box;">
+      </div>
+      
+      <textarea placeholder="Please describe your issue in detail..." formControlName="description" rows="3" 
                 style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);"></textarea>
       
-      <select formControlName="priority" style="padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);">
-        <option value="" disabled selected>Select Priority</option>
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-      </select>
+      <!-- Dynamic FormArray for Steps to Reproduce -->
+      <div style="border: 1px solid #eee; padding: 15px; border-radius: 4px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <strong style="color: var(--vc-navy);">Steps to Reproduce</strong>
+          <button type="button" (click)="addStep()" style="background: var(--vc-orange); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">+ Add Step</button>
+        </div>
+        
+        <div formArrayName="steps">
+          <div *ngFor="let step of steps.controls; let i=index" style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" [formControlName]="i" placeholder="Step {{i + 1}}" 
+                   style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; outline-color: var(--vc-orange);">
+            <button type="button" (click)="removeStep(i)" [disabled]="steps.length === 1"
+                    style="background: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;"
+                    [style.opacity]="steps.length === 1 ? '0.5' : '1'">X</button>
+          </div>
+        </div>
+      </div>
 
       <button type="submit" [disabled]="ticketForm.invalid" 
-              style="background: var(--vc-navy); color: white; border: none; padding: 14px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;">
+              style="background: var(--vc-navy); color: white; border: none; padding: 14px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; transition: opacity 0.3s;"
+              [style.opacity]="ticketForm.invalid ? '0.6' : '1'">
         Create Ticket
       </button>
 
